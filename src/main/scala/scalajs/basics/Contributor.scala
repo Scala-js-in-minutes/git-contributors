@@ -1,18 +1,11 @@
 package scalajs.basics
 
-import upickle.implicits.key
+import scala.scalajs.js
 
-case class Contributor
-(
-  @key("login")
-  user: String,
-
-  @key("html_url")
-  githubPage: String,
-
-  @key("avatar_url")
-  imageUrl: String,
-
-  @key("contributions")
-  contributions: Int
-)
+@js.native
+trait Contributor extends js.Object {
+  val login: String = js.native
+  val html_url: String = js.native
+  val avatar_url: String = js.native
+  val contributions: Int = js.native
+}

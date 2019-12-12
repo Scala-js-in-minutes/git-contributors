@@ -2,10 +2,11 @@ package scalajs.basics
 
 import org.scalajs.dom._
 import org.scalajs.dom.ext.Ajax
-import upickle.default.{macroRW, ReadWriter => RW, _}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.scalajs.js
+import scala.scalajs.js.JSON
 import scala.util.{Failure, Success}
 
 object AppEntryPoint extends App with HtmlElements {
@@ -20,8 +21,8 @@ object AppEntryPoint extends App with HtmlElements {
   private def getContributors(user: String, project: String): Future[List[Contributor]] =
     Ajax.get(url = s"https://api.github.com/repos/$user/$project/contributors")
       .map { xhr =>
-        implicit val rw: RW[Contributor] = macroRW
-        read[List[Contributor]](xhr.responseText)
+        val json = JSON.parse(xhr.responseText)
+        json.asInstanceOf[js.Array[Contributor]].toList
       }
 
   private def displayAllContributors(contributors: List[Contributor]): Unit = contributors.foreach { contributor =>
@@ -29,10 +30,10 @@ object AppEntryPoint extends App with HtmlElements {
     container.appendChild(
       div("float:left; padding: 10px; border-style: dotted; border-width: 1px;",
         div(noStyle,
-          a(contributor.user, contributor.githubPage),
+          a(contributor.login, contributor.html_url),
           span(s" (${contributor.contributions})")
         ),
-        div(noStyle, img(contributor.imageUrl, "max-width: 100px; max-height: 100px")),
+        div(noStyle, img(contributor.avatar_url, "max-width: 100px; max-height: 100px")),
       )
     )
   }

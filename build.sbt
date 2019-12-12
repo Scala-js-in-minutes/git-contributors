@@ -7,7 +7,4 @@ scalaVersion := "2.13.1"
 isSnapshot := true
 
 scalaJSUseMainModuleInitializer := true
-libraryDependencies ++= Seq(
-  "org.scala-js" %%% "scalajs-dom" % "0.9.7",
-  "com.lihaoyi" %%% "upickle" % "0.8.0"
-)
+libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7"
